@@ -10,6 +10,7 @@
 import requests
 
 from octohub import __useragent__
+from octohub.response import parse_response
 
 class Connection(object):
     def __init__(self, token=None):
@@ -29,12 +30,13 @@ class Connection(object):
             params (dict): Parameters to include in request
             data (str | file type object): data to include in request
 
-            returns: requests.Response object:
+            returns: requests.Response object, including:
+                response.parsed (AttrDict): parsed response when applicable
                 http://docs.python-requests.org/en/latest/api/#requests.Response
         """
         url = self.endpoint + uri
         kwargs = {'headers': self.headers, 'params': params, 'data': data}
         response = requests.request(method, url, **kwargs)
 
-        return response
+        return parse_response(response)
 
