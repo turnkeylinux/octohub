@@ -25,6 +25,10 @@ for handling pagination.
 Also included is a command line interface for quick interaction with
 GitHub's API.
 
+Speaking of development, it's really easy to leverage the base code to
+develop higher level tools, see `contrib`_ for some examples. We also
+love pull requests, see our `gitflow`_ for guidelines and walk through.
+
 Installation
 ------------
 
@@ -112,6 +116,8 @@ For more example usage::
 .. _Users: http://developer.github.com/v3/users/
 .. _Search: http://developer.github.com/v3/search/
 .. _online documentation: http://developer.github.com/v3/
+.. _contrib: https://github.com/turnkeylinux/octohub/contrib/
+.. _gitflow: https://github.com/turnkeylinux/tracker/blob/master/GITFLOW.rst
 .. _python-requests: http://python-requests.org/
 .. _python-simplejson: https://github.com/simplejson/simplejson/
 .. _account settings: https://github.com/settings/applications
