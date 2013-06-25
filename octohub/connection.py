@@ -12,6 +12,35 @@ import requests
 from octohub import __useragent__
 from octohub.response import parse_response
 
+class Pager(object):
+    def __init__(self, conn, uri, params, max_pages=0):
+        """Iterator object handling pagination of Connection.send (method: GET)
+            conn (octohub.Connection): Connection object
+            uri (str): Request URI (e.g., /user/issues)
+            params (dict): Parameters to include in request
+            max_pages (int): Maximum amount of pages to get (0 for all)
+        """
+        self.conn = conn
+        self.uri = uri
+        self.params = params
+        self.max_pages = max_pages
+        self.count = 0
+
+    def __iter__(self):
+        while True:
+            self.count += 1
+            response = self.conn.send('GET', self.uri, self.params)
+            yield response
+
+            if self.count == self.max_pages:
+                break
+
+            if not 'next' in response.parsed_link.keys():
+                break
+
+            self.uri = response.parsed_link.next.uri
+            self.params = response.parsed_link.next.params
+
 class Connection(object):
     def __init__(self, token=None):
         """OctoHub connection
@@ -32,6 +61,7 @@ class Connection(object):
 
             returns: requests.Response object, including:
                 response.parsed (AttrDict): parsed response when applicable
+                response.parsed_link (AttrDict): parsed header link when applicable
                 http://docs.python-requests.org/en/latest/api/#requests.Response
         """
         url = self.endpoint + uri
