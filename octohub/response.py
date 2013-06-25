@@ -7,8 +7,10 @@
 # Foundation; either version 3 of the License, or (at your option) any later
 # version.
 
-from octohub.utils import AttrDict
+from octohub.utils import AttrDict, get_logger
 from octohub.exceptions import ResponseError, OctoHubError
+
+log = get_logger('response')
 
 def _get_content_type(response):
     """Parse response and return content-type"""
@@ -48,6 +50,11 @@ def parse_response(response):
             http://docs.python-requests.org/en/latest/api/#requests.Response
     """
     response.parsed = AttrDict()
+
+    headers = ['status', 'x-ratelimit-limit', 'x-ratelimit-remaining']
+    for header in headers:
+        log.info('%s: %s' % (header, response.headers[header]))
+
     content_type = _get_content_type(response)
 
     if content_type == 'application/json':

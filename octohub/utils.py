@@ -7,6 +7,9 @@
 # Foundation; either version 3 of the License, or (at your option) any later
 # version.
 
+import os
+import logging
+
 class AttrDict(dict):
     """Attribute Dictionary (set and access attributes 'pythonically')"""
     def __getattr__(self, name):
@@ -16,4 +19,22 @@ class AttrDict(dict):
 
     def __setattr__(self, name, val):
         self[name] = val
+
+def get_logger(name, level=None):
+    """Returns logging handler based on name and level (stderr)
+        name (str): name of logging handler
+        level (str): see logging.LEVEL
+    """
+    logger = logging.getLogger(name)
+
+    if not logger.handlers:
+        stderr = logging.StreamHandler()
+        stderr.setFormatter(logging.Formatter(
+            '%(levelname)s [%(name)s]: %(message)s'))
+        logger.addHandler(stderr)
+
+        level = level if level else os.environ.get('OCTOHUB_LOGLEVEL', 'CRITICAL')
+        logger.setLevel(getattr(logging, level))
+
+    return logger
 
