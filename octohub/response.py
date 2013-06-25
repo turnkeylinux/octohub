@@ -7,6 +7,8 @@
 # Foundation; either version 3 of the License, or (at your option) any later
 # version.
 
+import re
+
 from octohub.utils import AttrDict, get_logger
 from octohub.exceptions import ResponseError, OctoHubError
 
@@ -21,6 +23,27 @@ def _get_content_type(response):
         content_type = None
 
     return content_type
+
+def _parse_link(header_link):
+    """Parse header link and return AttrDict[rel].uri|params"""
+    links = AttrDict()
+    for s in header_link.split(','):
+        link = AttrDict()
+
+        m = re.match('<https://api.github.com(.*)\?(.*)>', s.split(';')[0].strip())
+        link.uri = m.groups()[0]
+        link.params = {}
+        for kv in m.groups()[1].split('&'):
+            key, value = kv.split('=')
+            link.params[key] = value
+
+        m = re.match('rel="(.*)"', s.split(';')[1].strip())
+        rel = m.groups()[0]
+
+        links[rel] = link
+        log.debug('link-%s-page: %s' % (rel, link.params['page']))
+
+    return links
 
 def parse_element(el):
     """Parse el recursively, replacing dicts with AttrDicts representation"""
@@ -47,9 +70,14 @@ def parse_response(response):
 
         returns: requests.Response object, including:
             response.parsed (AttrDict)
+            response.parsed_link (AttrDict)
             http://docs.python-requests.org/en/latest/api/#requests.Response
     """
     response.parsed = AttrDict()
+    response.parsed_link = AttrDict()
+
+    if 'link' in response.headers.keys():
+        response.parsed_link = _parse_link(response.headers['link'])
 
     headers = ['status', 'x-ratelimit-limit', 'x-ratelimit-remaining']
     for header in headers:
