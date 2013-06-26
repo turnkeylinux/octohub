@@ -116,7 +116,7 @@ For more example usage::
 .. _Users: http://developer.github.com/v3/users/
 .. _Search: http://developer.github.com/v3/search/
 .. _online documentation: http://developer.github.com/v3/
-.. _contrib: https://github.com/turnkeylinux/octohub/contrib/
+.. _contrib: https://github.com/turnkeylinux/octohub/tree/master/contrib/
 .. _gitflow: https://github.com/turnkeylinux/tracker/blob/master/GITFLOW.rst
 .. _python-requests: http://python-requests.org/
 .. _python-simplejson: https://github.com/simplejson/simplejson/
