@@ -81,7 +81,8 @@ def parse_response(response):
 
     headers = ['status', 'x-ratelimit-limit', 'x-ratelimit-remaining']
     for header in headers:
-        log.info('%s: %s' % (header, response.headers[header]))
+        if header in response.headers.keys():
+            log.info('%s: %s' % (header, response.headers[header]))
 
     content_type = _get_content_type(response)
 
