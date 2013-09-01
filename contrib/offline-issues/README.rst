@@ -1,5 +1,5 @@
-OctoHub Contib: Offline Issues
-==============================
+OctoHub Contrib: Offline Issues
+===============================
 
 ``offline-issues`` leverages OctoHub to download GitHub issues, and then
 parses them into a directory structure of symlinks based on issue
