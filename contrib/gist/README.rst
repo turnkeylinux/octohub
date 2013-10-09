@@ -1,5 +1,5 @@
-OctoHub Contib: Gist CLI
-========================
+OctoHub Contrib: Gist CLI
+=========================
 
 ``gist`` is a command line interface for uploading and listing `GitHub Gists`_.
 
