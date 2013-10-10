@@ -74,7 +74,9 @@ Usage examples (CLI)
 
 ::
 
-    $ export OCTOHUB_TOKEN=...
+    # A Personal Access Token from your GitHub account:
+    #   Account Settings > Applications > Personal Access Tokens > Create new token
+    $ export OCTOHUB_TOKEN=d34db33fd34db33fd34db33fd34db33fd34db33f
     $ export OCTOHUB_LOGLEVEL=INFO
     $ octohub GET /repos/turnkeylinux/tracker/issues labels=feature
 
