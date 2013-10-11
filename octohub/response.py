@@ -87,7 +87,10 @@ def parse_response(response):
     content_type = _get_content_type(response)
 
     if content_type == 'application/json':
-        response.parsed = parse_element(response.json())
+        json = response.json
+        if callable(json):
+            json = json()
+        response.parsed = parse_element(json)
     else:
         if not response.status_code == 204:
             raise OctoHubError('unhandled content_type: %s' % content_type)
