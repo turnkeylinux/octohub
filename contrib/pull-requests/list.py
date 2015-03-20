@@ -99,7 +99,7 @@ def main():
             print '%s/%s\n' % (owner, repo)
             for pull in response.parsed:
                 print '  [%s] %s' % (pull.head.user.login, pull.title)
-                print '  %s' % pull.issue_url
+                print '  %s' % pull.html_url
                 print
 
 
