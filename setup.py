@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 import octohub
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 setup(
     name='octohub',
     version=octohub.__version__,
+    install_requires=['requests'],
     description='Low level Python and CLI interface to GitHub',
     long_description=open('README.rst').read(),
     author='Alon Swartz',
@@ -13,4 +17,5 @@ setup(
     packages=[
         'octohub',
     ],
+    entry_points={'console_scripts': ['octohub = octohub.cmd:main']}
 )
