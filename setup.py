@@ -8,7 +8,7 @@ except ImportError:
 setup(
     name='octohub',
     version=octohub.__version__,
-    install_requires=['requests'],
+    install_requires=['simplejson', 'requests'],
     description='Low level Python and CLI interface to GitHub',
     long_description=open('README.rst').read(),
     author='Alon Swartz',
