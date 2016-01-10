@@ -38,7 +38,10 @@ class Pager(object):
             if not 'next' in response.parsed_link.keys():
                 break
 
-            self.uri = response.parsed_link.next.uri
+            # Parsed link is absolute. Connection wants a relative link,
+            # so remove protocol and GitHub endpoint for the pagination URI.
+            m = re.match(self.conn.endpoint + '(.*)', response.parsed_link.next.uri)
+            self.uri = m.groups()[0]
             self.params = response.parsed_link.next.params
 
 class Connection(object):

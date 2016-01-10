@@ -30,7 +30,7 @@ def _parse_link(header_link):
     for s in header_link.split(','):
         link = AttrDict()
 
-        m = re.match('<https://api.github.com(.*)\?(.*)>', s.split(';')[0].strip())
+        m = re.match('<(.*)\?(.*)>', s.split(';')[0].strip())
         link.uri = m.groups()[0]
         link.params = {}
         for kv in m.groups()[1].split('&'):
