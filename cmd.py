@@ -46,16 +46,16 @@ from octohub.connection import Connection, Pager
 from octohub.exceptions import ResponseError
 
 def fatal(e):
-    print >> sys.stderr, 'Error: ' + str(e)
+    print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
 
 def usage(e=None):
     if e:
-        print >> sys.stderr, 'Error: ' + str(e)
+        print('Error: ' + str(e), file=sys.stderr)
 
     cmd = os.path.basename(sys.argv[0])
-    print >> sys.stderr, 'Syntax: %s method uri [arg=val...]' % cmd
-    print >> sys.stderr, __doc__.strip()
+    print('Syntax: %s method uri [arg=val...]' % cmd, file=sys.stderr)
+    print(__doc__.strip(), file=sys.stderr)
 
     sys.exit(1)
 
@@ -63,7 +63,7 @@ def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'h',
                                        ['help', 'input=', 'max-pages='])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     data = None
@@ -104,14 +104,14 @@ def main():
     try:
         if max_pages is None:
             response = conn.send(method, uri, params, data)
-            print json.dumps(response.parsed, indent=1)
+            print(json.dumps(response.parsed, indent=1))
         else:
             parsed = []
             pager = Pager(conn, uri, params, max_pages=max_pages)
             for response in pager:
                 parsed.extend(response.parsed)
-            print json.dumps(parsed, indent=1),
-    except ResponseError, e:
+            print(json.dumps(parsed, indent=1), end=' ')
+    except ResponseError as e:
         fatal(e)
 
 if __name__ == '__main__':
