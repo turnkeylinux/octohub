@@ -35,7 +35,7 @@ class Pager(object):
             if self.count == self.max_pages:
                 break
 
-            if not 'next' in response.parsed_link.keys():
+            if not 'next' in list(response.parsed_link.keys()):
                 break
 
             # Parsed link is absolute. Connection wants a relative link,

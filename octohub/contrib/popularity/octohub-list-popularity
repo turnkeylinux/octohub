@@ -32,16 +32,16 @@ from octohub.connection import Connection, Pager
 from octohub.exceptions import ResponseError
 
 def fatal(e):
-    print >> sys.stderr, 'Error: ' + str(e)
+    print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
 
 def usage(e=None):
     if e:
-        print >> sys.stderr, 'Error: ' + str(e)
+        print('Error: ' + str(e), file=sys.stderr)
 
     cmd = os.path.basename(sys.argv[0])
-    print >> sys.stderr, 'Syntax: %s [-options] owner' % cmd
-    print >> sys.stderr, __doc__.lstrip()
+    print('Syntax: %s [-options] owner' % cmd, file=sys.stderr)
+    print(__doc__.lstrip(), file=sys.stderr)
 
     sys.exit(1)
 
@@ -58,7 +58,7 @@ def main():
     try:
         l_opts = ['help', 'noauth', 'sort=']
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'hns:', l_opts)
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     auth = True
@@ -92,14 +92,14 @@ def main():
 
     try:
         repos = get_repos(conn, '/orgs/%s/repos' % owner)
-    except ResponseError, e:
+    except ResponseError as e:
         repos = get_repos(conn, '/users/%s/repos' % owner)
 
 
-    print "# repo                         watchers forks"
+    print("# repo                         watchers forks")
     for repo in sorted(repos, key=lambda repo: repo[sort_by], reverse=True):
-        print "%-30s %-8d %d" % (
-            repo["name"], repo["watchers"], repo["forks"])
+        print("%-30s %-8d %d" % (
+            repo["name"], repo["watchers"], repo["forks"]))
 
 
 if __name__ == '__main__':
