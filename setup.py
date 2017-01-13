@@ -25,4 +25,11 @@ setuptools.setup(
             'octohub=octohub.__main__:main',
         ],
     },
+    scripts=[
+        'octohub/contrib/gist/octohub-gist',
+        'octohub/contrib/offline-issues/octohub-parse-issues',
+        'octohub/contrib/offline-issues/octohub-update-issues',
+        'octohub/contrib/popularity/octohub-list-popularity',
+        'octohub/contrib/pull-requests/octohub-list-pullrequests',
+    ],
 )
