@@ -17,4 +17,9 @@ setup(
     packages=[
         'octohub',
     ],
+    entry_points={
+        'octohub': [
+            'octohub=octohub.__main__:main',
+        ],
+    },
 )
