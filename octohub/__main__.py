@@ -40,7 +40,10 @@ http://developer.github.com/v3/
 import os
 import sys
 import getopt
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 from octohub.connection import Connection, Pager
 from octohub.exceptions import ResponseError

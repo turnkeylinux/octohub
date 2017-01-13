@@ -7,7 +7,10 @@
 # Foundation; either version 3 of the License, or (at your option) any later
 # version.
 
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 class ResponseError(Exception):
     """Accessible attributes: error
