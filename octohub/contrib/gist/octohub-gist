@@ -38,7 +38,10 @@ Examples:
 import os
 import sys
 import getopt
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 from octohub.connection import Connection, Pager
 

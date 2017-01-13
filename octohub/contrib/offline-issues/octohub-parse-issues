@@ -32,7 +32,10 @@ import getopt
 import shutil
 import unicodedata
 
-import simplejson as json
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 from octohub.response import parse_element
 
@@ -75,7 +78,7 @@ def output_issues(issues, outdir):
         path = os.path.join(outdir, 'all', str(issue.number))
         path_symlink = '../../all/%s' % str(issue.number)
         mkdir(os.path.dirname(path))
-        file(path, 'w').write(json.dumps(issue, indent=1))
+        open(path, 'w').write(json.dumps(issue, indent=1))
 
         path = os.path.join(outdir, 'state', issue.state, slug)
         symlink(path_symlink, path)
@@ -120,7 +123,7 @@ def main():
             if os.path.exists(path):
                 shutil.rmtree(path)
 
-    issues_dict = json.loads(file(infile, 'r').read())
+    issues_dict = json.loads(open(infile, 'r').read())
     issues_parsed = parse_element(issues_dict)
     output_issues(issues_parsed, outdir)
 
