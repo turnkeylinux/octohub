@@ -20,6 +20,9 @@ Options:
     --input <file>      Path to json encoded file for data (- for stdin)
     --max-pages <int>   Maximum pagination calls (only GET method supported)
                         For all pages, specify 0
+    --preview <key>     Enable Github API "preview" features
+                        See the Github API Doc for the feature "key" (custom media type)
+                        e.g. --preview=drax will enable the "FLOSS License Use" API
 
 Environment:
     OCTOHUB_TOKEN       GitHub personal access token
@@ -61,13 +64,15 @@ def usage(e=None):
 
 def main():
     try:
-        opts, args = getopt.gnu_getopt(sys.argv[1:], 'h',
-                                       ['help', 'input=', 'max-pages='])
+        opts, args = getopt.gnu_getopt(
+            sys.argv[1:], 'h',
+            ['help', 'input=', 'max-pages=', 'preview='])
     except getopt.GetoptError, e:
         usage(e)
 
     data = None
     max_pages = None
+    preview_key = None
     for opt, val in opts:
         if opt in ('-h', '--help'):
             usage()
@@ -80,6 +85,9 @@ def main():
 
         elif opt == '--max-pages':
             max_pages = int(val)
+
+        elif opt == '--preview':
+            preview_key = val
 
     if len(args) == 0:
         usage()
@@ -99,7 +107,10 @@ def main():
         params[key] = val
 
     token = os.environ.get('OCTOHUB_TOKEN', None)
-    conn = Connection(token)
+    headers = {}
+    if preview_key:
+        headers['Accept'] = 'application/vnd.github.%s-preview+json' % preview_key
+    conn = Connection(token, headers=headers)
 
     try:
         if max_pages is None:

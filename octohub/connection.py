@@ -45,12 +45,14 @@ class Pager(object):
             self.params = response.parsed_link.next.params
 
 class Connection(object):
-    def __init__(self, token=None):
+    def __init__(self, token=None, headers=None):
         """OctoHub connection
             token (str): GitHub Token (anonymous if not provided)
         """
         self.endpoint = 'https://api.github.com'
         self.headers = {'User-Agent': __useragent__}
+        if headers:
+            self.headers.update(headers)
 
         if token:
             self.headers['Authorization'] = 'token %s' % token
