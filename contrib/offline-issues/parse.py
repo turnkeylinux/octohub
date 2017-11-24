@@ -37,15 +37,15 @@ import simplejson as json
 from octohub.response import parse_element
 
 def fatal(e):
-    print >> sys.stderr, 'Error: ' + str(e)
+    print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
 
 def usage(e=None):
     if e:
-        print >> sys.stderr, 'Error:', e
+        print('Error:', e, file=sys.stderr)
 
-    print >> sys.stderr, 'Syntax: %s [-options] issues.json outdir' % sys.argv[0]
-    print >> sys.stderr, __doc__.strip()
+    print('Syntax: %s [-options] issues.json outdir' % sys.argv[0], file=sys.stderr)
+    print(__doc__.strip(), file=sys.stderr)
 
     sys.exit(1)
 
@@ -62,9 +62,9 @@ def slugify(value):
     """Normalizes string, converts to lowercase, removes non-alpha characters,
     and converts spaces to hyphens.
     """
-    value = unicode(value)
+    value = str(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
+    value = str(re.sub('[^\w\s-]', '', value).strip().lower())
     return re.sub('[-\s]+', '-', value)
 
 def output_issues(issues, outdir):
@@ -91,7 +91,7 @@ def output_issues(issues, outdir):
 def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'h', ['help', 'noinit'])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     init = True
