@@ -45,9 +45,11 @@ import simplejson as json
 from octohub.connection import Connection, Pager
 from octohub.exceptions import ResponseError
 
+
 def fatal(e):
     print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
+
 
 def usage(e=None):
     if e:
@@ -58,6 +60,7 @@ def usage(e=None):
     print(__doc__.strip(), file=sys.stderr)
 
     sys.exit(1)
+
 
 def main():
     try:
@@ -114,5 +117,6 @@ def main():
     except ResponseError as e:
         fatal(e)
 
+
 if __name__ == '__main__':
-   main()
+    main()

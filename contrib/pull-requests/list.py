@@ -31,9 +31,11 @@ import getopt
 from octohub.connection import Connection, Pager
 from octohub.exceptions import ResponseError
 
+
 def fatal(e):
     print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
+
 
 def usage(e=None):
     if e:
@@ -45,6 +47,7 @@ def usage(e=None):
 
     sys.exit(1)
 
+
 def get_repos(conn, uri, issues_min=1, forks_min=1):
     repos = []
     pager = Pager(conn, uri, params={}, max_pages=0)
@@ -55,6 +58,7 @@ def get_repos(conn, uri, issues_min=1, forks_min=1):
                 repos.append(repo.name)
 
     return repos
+
 
 def main():
     try:
@@ -104,4 +108,4 @@ def main():
 
 
 if __name__ == '__main__':
-   main()
+    main()

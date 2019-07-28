@@ -42,9 +42,11 @@ import simplejson as json
 
 from octohub.connection import Connection, Pager
 
+
 def fatal(e):
     print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
+
 
 def usage(e=None):
     if e:
@@ -56,10 +58,12 @@ def usage(e=None):
 
     sys.exit(1)
 
+
 def render_gist(gist):
     files = ' '.join(list(gist.files.keys())).encode('ascii', 'ignore').strip()
     visible = 'pub' if gist.public else 'sec'
     return '[%s] %s %s' % (visible, gist.html_url, files)
+
 
 def get_gists(token, uri):
     max_pages = 0 if token else 1
@@ -69,6 +73,7 @@ def get_gists(token, uri):
     for response in pager:
         for gist in response.parsed:
             yield gist
+
 
 def create_gist(token, uri, paths, public=False, description=None):
     data = {}
@@ -88,6 +93,7 @@ def create_gist(token, uri, paths, public=False, description=None):
     response = conn.send('POST', uri, params={}, data=json.dumps(data))
 
     return response.parsed
+
 
 def main():
     try:
@@ -132,5 +138,6 @@ def main():
         gist = create_gist(token, uri, paths, public, description)
         print(render_gist(gist))
 
+
 if __name__ == '__main__':
-   main()
+    main()

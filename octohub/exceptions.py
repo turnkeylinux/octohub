@@ -9,6 +9,7 @@
 
 import simplejson as json
 
+
 class ResponseError(Exception):
     """Accessible attributes: error
         error (AttrDict): Parsed error response
@@ -23,4 +24,3 @@ class ResponseError(Exception):
 
 class OctoHubError(Exception):
     pass
-

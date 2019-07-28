@@ -31,9 +31,11 @@ import getopt
 from octohub.connection import Connection, Pager
 from octohub.exceptions import ResponseError
 
+
 def fatal(e):
     print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
+
 
 def usage(e=None):
     if e:
@@ -45,6 +47,7 @@ def usage(e=None):
 
     sys.exit(1)
 
+
 def get_repos(conn, uri):
     repos = []
     pager = Pager(conn, uri, params={}, max_pages=0)
@@ -53,6 +56,7 @@ def get_repos(conn, uri):
             repos.append(repo)
 
     return repos
+
 
 def main():
     try:
@@ -85,7 +89,7 @@ def main():
     if not auth:
         token = None
 
-    if not sort_by in ('watchers', 'forks'):
+    if sort_by not in ('watchers', 'forks'):
         fatal('sort value not supported: %s' % sort_by)
 
     conn = Connection(token)
@@ -95,7 +99,6 @@ def main():
     except ResponseError as e:
         repos = get_repos(conn, '/users/%s/repos' % owner)
 
-
     print("# repo                         watchers forks")
     for repo in sorted(repos, key=lambda repo: repo[sort_by], reverse=True):
         print("%-30s %-8d %d" % (
@@ -103,4 +106,4 @@ def main():
 
 
 if __name__ == '__main__':
-   main()
+    main()

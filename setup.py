@@ -12,7 +12,8 @@ setup(
     url='https://github.com/turnkeylinux/octohub',
     license='GPLv3+',
     classifiers=[
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+        'License :: OSI Approved :: GNU General Public License v3 or later '
+        '(GPLv3+)',
     ],
     packages=[
         'octohub',

@@ -36,27 +36,33 @@ import simplejson as json
 
 from octohub.response import parse_element
 
+
 def fatal(e):
     print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
+
 
 def usage(e=None):
     if e:
         print('Error:', e, file=sys.stderr)
 
-    print('Syntax: %s [-options] issues.json outdir' % sys.argv[0], file=sys.stderr)
+    print('Syntax: %s [-options] issues.json outdir' % sys.argv[0],
+          file=sys.stderr)
     print(__doc__.strip(), file=sys.stderr)
 
     sys.exit(1)
 
+
 def mkdir(path):
     if not os.path.exists(path):
-         os.makedirs(path)
+        os.makedirs(path)
+
 
 def symlink(target, link_name):
     if not os.path.exists(link_name):
         mkdir(os.path.dirname(link_name))
         os.symlink(target, link_name)
+
 
 def slugify(value):
     """Normalizes string, converts to lowercase, removes non-alpha characters,
@@ -66,6 +72,7 @@ def slugify(value):
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
     value = str(re.sub('[^\w\s-]', '', value).strip().lower())
     return re.sub('[-\s]+', '-', value)
+
 
 def output_issues(issues, outdir):
     """Parse issues and output directory listing"""
@@ -87,6 +94,7 @@ def output_issues(issues, outdir):
         if issue.assignee:
             path = os.path.join(outdir, 'assignee', issue.assignee.login, slug)
             symlink(path_symlink, path)
+
 
 def main():
     try:
@@ -124,5 +132,6 @@ def main():
     issues_parsed = parse_element(issues_dict)
     output_issues(issues_parsed, outdir)
 
+
 if __name__ == "__main__":
-   main()
+    main()
