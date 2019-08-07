@@ -1,6 +1,6 @@
 #!/usr/bin/dh-exec
 
-cmd.py => usr/bin/octohub
+octohub_cmd.py => usr/bin/octohub
 contrib/gist/gist.py => usr/bin/octohub-gist
 contrib/offline-issues/parse.py => usr/bin/octohub-parse-issues
 contrib/offline-issues/update.sh => usr/bin/octohub-parse-issues-update
