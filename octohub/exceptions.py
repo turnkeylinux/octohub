@@ -7,7 +7,7 @@
 # Foundation; either version 3 of the License, or (at your option) any later
 # version.
 
-import simplejson as json
+import json
 
 
 class ResponseError(Exception):
