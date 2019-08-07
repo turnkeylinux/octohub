@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # Copyright (c) 2013 Alon Swartz <alon@turnkeylinux.org>
 #
 # This file is part of octohub/contrib
@@ -32,7 +32,7 @@ import getopt
 import shutil
 import unicodedata
 
-import simplejson as json
+import json
 
 from octohub.response import parse_element
 
