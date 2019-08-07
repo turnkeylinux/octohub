@@ -9,7 +9,6 @@ Build-Depends:
  python3-all (>= 3.5~),
  python3-setuptools,
  python3-requests,
- python3-simplejson
 X-Python-Version: >= 3.5
 Standards-Version: 4.0.0
 
@@ -18,8 +17,7 @@ Architecture: any
 Depends:
  ${misc:Depends},
  ${python3:Depends},
- python3-request,
- python3-simplejson
+ python3-requests,
 Suggests:
  python3-profiler,
 Description: OctoHub: Low level Python and CLI interface to GitHub
