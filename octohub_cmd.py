@@ -40,7 +40,7 @@ http://developer.github.com/v3/
 import os
 import sys
 import getopt
-import simplejson as json
+import json
 
 from octohub.connection import Connection, Pager
 from octohub.exceptions import ResponseError
@@ -79,7 +79,8 @@ def main():
             if val == '-':
                 data = sys.stdin
             else:
-                data = file(val, 'r')
+                with open(val, 'r') as fob:
+                    data = json.load(fob)
 
         elif opt == '--max-pages':
             max_pages = int(val)
