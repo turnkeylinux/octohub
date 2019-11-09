@@ -15,6 +15,7 @@ fatal() {
 
 ISSUES_URI=/repos/turnkeylinux/tracker/issues
 ISSUES_DIR=$(dirname $(readlink -f $0))
+[ -w "$ISSUES_DIR" ] || ISSUES_DIR=$HOME/.octohub
 
 which octohub >/dev/null || fatal "octohub not in path"
 which octohub-parse-issues >/dev/null || fatal "octohub-parse-issues not in path"

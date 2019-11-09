@@ -68,10 +68,9 @@ def slugify(value):
     """Normalizes string, converts to lowercase, removes non-alpha characters,
     and converts spaces to hyphens.
     """
-    value = str(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = str(re.sub('[^\w\s-]', '', value).strip().lower())
-    return re.sub('[-\s]+', '-', value)
+    value = re.sub(rb'[^\w\s-]', b'', value).strip().lower()
+    return re.sub(rb'[-\s]+', b'-', value).decode()
 
 
 def output_issues(issues, outdir):
@@ -83,7 +82,6 @@ def output_issues(issues, outdir):
         path_symlink = '../../all/%s' % str(issue.number)
         mkdir(os.path.dirname(path))
         open(path, 'w').write(json.dumps(issue, indent=1))
-
         path = os.path.join(outdir, 'state', issue.state, slug)
         symlink(path_symlink, path)
 

@@ -8,6 +8,7 @@
 # version.
 
 import requests
+import re
 
 from octohub import __useragent__
 from octohub.response import parse_response
