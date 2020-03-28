@@ -41,7 +41,7 @@ install:
 	@echo 
 
 	install -d $(PATH_BIN) $(PATH_INSTALL_LIB)
-	python setup.py install --prefix $(prefix) --install-layout=deb
+	python3 setup.py install --prefix $(prefix) --install-layout=deb
 	cp cmd*.py $(PATH_INSTALL_LIB)
 
 	$(call with-py-executables, \
