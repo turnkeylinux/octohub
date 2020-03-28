@@ -14,7 +14,7 @@ from octohub import __useragent__
 from octohub.response import parse_response
 
 
-class Pager(object):
+class Pager:
     def __init__(self, conn, uri, params, max_pages=0):
         """Iterator object handling pagination of Connection.send (method: GET)
             conn (octohub.Connection): Connection object
@@ -48,7 +48,7 @@ class Pager(object):
             self.params = response.parsed_link.next.params
 
 
-class Connection(object):
+class Connection:
     def __init__(self, token=None):
         """OctoHub connection
             token (str): GitHub Token (anonymous if not provided)
