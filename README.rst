@@ -61,12 +61,12 @@ Usage examples (API)
     >>> uri = '/repos/turnkeylinux/tracker/issues'
     >>> response = conn.send('GET', uri, params={'labels': 'bug'})
     >>> for issue in response.parsed:
-    ...:    print issue.title
+    ...:    print(issue.title)
 
     >>> from octohub.connection import Pager
     >>> pager = Pager(conn, uri)
     >>> for issue in pager:
-    ...:    print issue.title
+    ...:    print(issue.title)
 
 Usage examples (CLI)
 --------------------
@@ -77,7 +77,7 @@ Usage examples (CLI)
     #   Account Settings > Applications > Personal Access Tokens > Create new token
     $ export OCTOHUB_TOKEN=d34db33fd34db33fd34db33fd34db33fd34db33f
     $ export OCTOHUB_LOGLEVEL=INFO
-    $ octohub GET /repos/turnkeylinux/tracker/issues labels=feature,core
+    $ octohub GET /repos/turnkeylinux/tracker/issues labels=feature,core per_page=100
 
     INFO [response]: status: 200 OK
     INFO [response]: x-ratelimit-limit: 5000
