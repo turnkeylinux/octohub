@@ -56,17 +56,18 @@ Usage examples (API)
 ::
 
     >>> from octohub.connection import Connection
-    
     >>> conn = Connection(token)
     >>> uri = '/repos/turnkeylinux/tracker/issues'
+
     >>> response = conn.send('GET', uri, params={'labels': 'bug'})
     >>> for issue in response.parsed:
     ...:    print(issue.title)
 
     >>> from octohub.connection import Pager
-    >>> pager = Pager(conn, uri)
-    >>> for issue in pager:
-    ...:    print(issue.title)
+    >>> pager = Pager(conn, uri, params={'labels': 'bug'})
+    >>> for issues in pager:
+    ...:    for issue in issues:
+    ...:        print(issue.title)
 
 Usage examples (CLI)
 --------------------

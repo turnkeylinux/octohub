@@ -32,7 +32,7 @@ class Pager:
         while True:
             self.count += 1
             response = self.conn.send('GET', self.uri, self.params)
-            yield response
+            yield response.parsed
 
             if self.count == self.max_pages:
                 break
