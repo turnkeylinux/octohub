@@ -81,7 +81,8 @@ def output_issues(issues, outdir):
         path = os.path.join(outdir, 'all', str(issue.number))
         path_symlink = '../../all/%s' % str(issue.number)
         mkdir(os.path.dirname(path))
-        open(path, 'w').write(json.dumps(issue, indent=1))
+        with open(path, 'w') as fob:
+            json.dump(issue, fob, indent=1)
         path = os.path.join(outdir, 'state', issue.state, slug)
         symlink(path_symlink, path)
 
