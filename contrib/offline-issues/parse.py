@@ -127,7 +127,8 @@ def main():
             if os.path.exists(path):
                 shutil.rmtree(path)
 
-    issues_dict = json.loads(open(infile, 'r').read())
+    with open(infile, 'r') as fob:
+        issues_dict = json.loads(fob)
     issues_parsed = parse_element(issues_dict)
     output_issues(issues_parsed, outdir)
 
