@@ -7,15 +7,17 @@
 # Foundation; either version 3 of the License, or (at your option) any later
 # version.
 
-import requests
+from typing import Optional, TextIO, Union
 import re
+import requests
 
 from octohub import __useragent__
 from octohub.response import parse_response
 
+DataSource = Union[TextIO, str]
 
 class Pager:
-    def __init__(self, conn, uri, params, max_pages=0):
+    def __init__(self, conn: Connection, uri: str, params: dict, max_pages: int=0):
         """Iterator object handling pagination of Connection.send (method: GET)
             conn (octohub.Connection): Connection object
             uri (str): Request URI (e.g., /user/issues)
@@ -49,7 +51,7 @@ class Pager:
 
 
 class Connection:
-    def __init__(self, token=None):
+    def __init__(self, token: Optional[str]=None):
         """OctoHub connection
             token (str): GitHub Token (anonymous if not provided)
         """
@@ -59,7 +61,9 @@ class Connection:
         if token:
             self.headers['Authorization'] = 'token %s' % token
 
-    def send(self, method, uri, params={}, data=None):
+    def send(
+            self, method: str, uri: str,
+            params: dict={}, data: Optional[DataSource]=None):
         """Prepare and send request
             method (str): Request HTTP method (e.g., GET, POST, DELETE, ...)
             uri (str): Request URI (e.g., /user/issues)
@@ -73,7 +77,7 @@ class Connection:
                 http://docs.python-requests.org/en/latest/api/#requests.Response
         """
         url = self.endpoint + uri
-        kwargs = {'headers': self.headers, 'params': params, 'data': data}
-        response = requests.request(method, url, **kwargs)
+        response = requests.request(method, url, headers=self.headers,
+                params=params, data=data)
 
         return parse_response(response)

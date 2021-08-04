@@ -9,20 +9,29 @@
 
 import os
 import logging
+from typing import Any, Optional, Protocol
 
+from requests import Response
+
+class ResponseExt(Protocol):
+    parsed: AttrDict
+    parsed_link: AttrDict
+
+class OctoResponse(Response, ResponseExt):
+    ...
 
 class AttrDict(dict):
     """Attribute Dictionary (set and access attributes 'pythonically')"""
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         if name in self:
             return self[name]
         raise AttributeError('no such attribute: %s' % name)
 
-    def __setattr__(self, name, val):
+    def __setattr__(self, name: str, val: Any):
         self[name] = val
 
 
-def get_logger(name, level=None):
+def get_logger(name: str, level: Optional[str]=None) -> logging.Logger:
     """Returns logging handler based on name and level (stderr)
         name (str): name of logging handler
         level (str): see logging.LEVEL
@@ -35,8 +44,8 @@ def get_logger(name, level=None):
             '%(levelname)s [%(name)s]: %(message)s'))
         logger.addHandler(stderr)
 
-        level = level if level else os.environ.get('OCTOHUB_LOGLEVEL',
-                                                   'CRITICAL')
-        logger.setLevel(getattr(logging, level))
+        env_level = os.environ.get('OCTOHUB_LOGLEVEL', 'CRITICAL')
+
+        logger.setLevel(getattr(logging, env_level if level is None else level))
 
     return logger
