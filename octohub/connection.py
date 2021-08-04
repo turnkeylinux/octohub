@@ -63,7 +63,7 @@ class Connection:
 
     def send(
             self, method: str, uri: str,
-            params: dict={}, data: Optional[DataSource]=None):
+            params: Optional[dict]=None, data: Optional[DataSource]=None):
         """Prepare and send request
             method (str): Request HTTP method (e.g., GET, POST, DELETE, ...)
             uri (str): Request URI (e.g., /user/issues)
@@ -76,6 +76,9 @@ class Connection:
                 applicable
                 http://docs.python-requests.org/en/latest/api/#requests.Response
         """
+        if params is None or params == {}:
+            params = dict()
+
         url = self.endpoint + uri
         response = requests.request(method, url, headers=self.headers,
                 params=params, data=data)
