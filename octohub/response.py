@@ -33,7 +33,7 @@ def _parse_link(header_link: str) -> AttrDict:
     for s in header_link.split(','):
         link = AttrDict()
 
-        m = re.match('<(.*)\?(.*)>', s.split(';')[0].strip())
+        m = re.match(r'<(.*)\?(.*)>', s.split(';')[0].strip())
         if m is None:
             raise OctoHubError("failed to match link uri")
         link.uri = m.groups()[0]
