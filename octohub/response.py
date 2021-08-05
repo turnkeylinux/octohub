@@ -7,32 +7,35 @@
 # Foundation; either version 3 of the License, or (at your option) any later
 # version.
 
+from typing import Optional, cast
 import re
 
-from octohub.utils import AttrDict, get_logger
+from octohub.utils import AttrDict, OctoResponse, get_logger
 from octohub.exceptions import ResponseError, OctoHubError
+
+import requests
 
 log = get_logger('response')
 
 
-def _get_content_type(response):
+def _get_content_type(response: requests.Response) -> Optional[str]:
     """Parse response and return content-type"""
     try:
         content_type = response.headers['Content-Type']
-        content_type = content_type.split(';', 1)[0]
+        return content_type.split(';', 1)[0]
     except KeyError:
-        content_type = None
-
-    return content_type
+        return None
 
 
-def _parse_link(header_link):
+def _parse_link(header_link: str) -> AttrDict:
     """Parse header link and return AttrDict[rel].uri|params"""
     links = AttrDict()
     for s in header_link.split(','):
         link = AttrDict()
 
-        m = re.match('<(.*)\?(.*)>', s.split(';')[0].strip())
+        m = re.match(r'<(.*)\?(.*)>', s.split(';')[0].strip())
+        if m is None:
+            raise OctoHubError("failed to match link uri")
         link.uri = m.groups()[0]
         link.params = {}
         for kv in m.groups()[1].split('&'):
@@ -40,6 +43,8 @@ def _parse_link(header_link):
             link.params[key] = value
 
         m = re.match('rel="(.*)"', s.split(';')[1].strip())
+        if m is None:
+            raise OctoHubError("failed to match link rel")
         rel = m.groups()[0]
 
         links[rel] = link
@@ -68,7 +73,7 @@ def parse_element(el):
         return el
 
 
-def parse_response(response):
+def parse_response(response: requests.Response) -> OctoResponse:
     """Parse request response object and raise exception on response error code
         response (requests.Response object):
 
@@ -77,6 +82,10 @@ def parse_response(response):
             response.parsed_link (AttrDict)
             http://docs.python-requests.org/en/latest/api/#requests.Response
     """
+    # I would prefer to change this return type to some new composed type which
+    # embeds the requests.Request type. But to avoid breaking changes this
+    # should provide the correct typing information to mypy.
+    response = cast(OctoResponse, response)
     response.parsed = AttrDict()
     response.parsed_link = AttrDict()
 

@@ -8,14 +8,14 @@
 # version.
 
 import json
-
+from octohub.utils import AttrDict
 
 class ResponseError(Exception):
     """Accessible attributes: error
         error (AttrDict): Parsed error response
     """
-    def __init__(self, error):
-        Exception.__init__(self, error)
+    def __init__(self, error: AttrDict):
+        super().__init__(error)
         self.error = error
 
     def __str__(self):
