@@ -10,6 +10,7 @@
 import os
 import logging
 
+
 class AttrDict(dict):
     """Attribute Dictionary (set and access attributes 'pythonically')"""
     def __getattr__(self, name):
@@ -19,6 +20,7 @@ class AttrDict(dict):
 
     def __setattr__(self, name, val):
         self[name] = val
+
 
 def get_logger(name, level=None):
     """Returns logging handler based on name and level (stderr)
@@ -33,8 +35,8 @@ def get_logger(name, level=None):
             '%(levelname)s [%(name)s]: %(message)s'))
         logger.addHandler(stderr)
 
-        level = level if level else os.environ.get('OCTOHUB_LOGLEVEL', 'CRITICAL')
+        level = level if level else os.environ.get('OCTOHUB_LOGLEVEL',
+                                                   'CRITICAL')
         logger.setLevel(getattr(logging, level))
 
     return logger
-

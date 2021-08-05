@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # Copyright (c) 2013 Alon Swartz <alon@turnkeylinux.org>
 #
 # This file is part of octohub/contrib.
@@ -38,28 +38,32 @@ Examples:
 import os
 import sys
 import getopt
-import simplejson as json
+import  json
 
 from octohub.connection import Connection, Pager
 
+
 def fatal(e):
-    print >> sys.stderr, 'Error: ' + str(e)
+    print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
+
 
 def usage(e=None):
     if e:
-        print >> sys.stderr, 'Error: ' + str(e)
+        print('Error: ' + str(e), file=sys.stderr)
 
     cmd = os.path.basename(sys.argv[0])
-    print >> sys.stderr, 'Syntax: %s [-options] [file...fileN]' % cmd
-    print >> sys.stderr, __doc__.lstrip()
+    print('Syntax: %s [-options] [file...fileN]' % cmd, file=sys.stderr)
+    print(__doc__.lstrip(), file=sys.stderr)
 
     sys.exit(1)
 
+
 def render_gist(gist):
-    files = ' '.join(gist.files.keys()).encode('ascii', 'ignore').strip()
+    files = ' '.join(list(gist.files.keys())).encode('ascii', 'ignore').strip()
     visible = 'pub' if gist.public else 'sec'
     return '[%s] %s %s' % (visible, gist.html_url, files)
+
 
 def get_gists(token, uri):
     max_pages = 0 if token else 1
@@ -69,6 +73,7 @@ def get_gists(token, uri):
     for response in pager:
         for gist in response.parsed:
             yield gist
+
 
 def create_gist(token, uri, paths, public=False, description=None):
     data = {}
@@ -89,11 +94,12 @@ def create_gist(token, uri, paths, public=False, description=None):
 
     return response.parsed
 
+
 def main():
     try:
         options = ['help', 'noauth', 'public', 'description=']
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'hnpd:', options)
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     auth = True
@@ -127,10 +133,11 @@ def main():
 
     if len(paths) == 0:
         for gist in get_gists(token, uri):
-            print render_gist(gist)
+            print(render_gist(gist))
     else:
         gist = create_gist(token, uri, paths, public, description)
-        print render_gist(gist)
+        print(render_gist(gist))
+
 
 if __name__ == '__main__':
-   main()
+    main()

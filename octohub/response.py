@@ -14,6 +14,7 @@ from octohub.exceptions import ResponseError, OctoHubError
 
 log = get_logger('response')
 
+
 def _get_content_type(response):
     """Parse response and return content-type"""
     try:
@@ -23,6 +24,7 @@ def _get_content_type(response):
         content_type = None
 
     return content_type
+
 
 def _parse_link(header_link):
     """Parse header link and return AttrDict[rel].uri|params"""
@@ -45,6 +47,7 @@ def _parse_link(header_link):
 
     return links
 
+
 def parse_element(el):
     """Parse el recursively, replacing dicts with AttrDicts representation"""
     if type(el) == dict:
@@ -63,6 +66,7 @@ def parse_element(el):
 
     else:
         return el
+
 
 def parse_response(response):
     """Parse request response object and raise exception on response error code
@@ -95,9 +99,7 @@ def parse_response(response):
         if not response.status_code == 204:
             raise OctoHubError('unhandled content_type: %s' % content_type)
 
-    if not response.status_code in (200, 201, 204):
+    if response.status_code not in (200, 201, 204):
         raise ResponseError(response.parsed)
 
     return response
-
-

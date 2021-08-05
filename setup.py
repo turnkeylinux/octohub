@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 import octohub
 from distutils.core import setup
 
@@ -12,7 +12,8 @@ setup(
     url='https://github.com/turnkeylinux/octohub',
     license='GPLv3+',
     classifiers=[
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+        'License :: OSI Approved :: GNU General Public License v3 or later '
+        '(GPLv3+)',
     ],
     packages=[
         'octohub',

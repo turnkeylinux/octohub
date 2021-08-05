@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # Copyright (c) 2013 Alon Swartz <alon@turnkeylinux.org>
 #
 # This file is part of octohub/contrib.
@@ -31,19 +31,22 @@ import getopt
 from octohub.connection import Connection, Pager
 from octohub.exceptions import ResponseError
 
+
 def fatal(e):
-    print >> sys.stderr, 'Error: ' + str(e)
+    print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
+
 
 def usage(e=None):
     if e:
-        print >> sys.stderr, 'Error: ' + str(e)
+        print('Error: ' + str(e), file=sys.stderr)
 
     cmd = os.path.basename(sys.argv[0])
-    print >> sys.stderr, 'Syntax: %s [-options] owner[/repo]' % cmd
-    print >> sys.stderr, __doc__.lstrip()
+    print('Syntax: %s [-options] owner[/repo]' % cmd, file=sys.stderr)
+    print(__doc__.lstrip(), file=sys.stderr)
 
     sys.exit(1)
+
 
 def get_repos(conn, uri, issues_min=1, forks_min=1):
     repos = []
@@ -56,10 +59,11 @@ def get_repos(conn, uri, issues_min=1, forks_min=1):
 
     return repos
 
+
 def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'hn', ['help', 'noauth'])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     auth = True
@@ -90,18 +94,18 @@ def main():
         owner = args[0]
         try:
             repos = get_repos(conn, '/orgs/%s/repos' % owner)
-        except ResponseError, e:
+        except ResponseError as e:
             repos = get_repos(conn, '/users/%s/repos' % owner)
 
     for repo in repos:
         response = conn.send('GET', '/repos/%s/%s/pulls' % (owner, repo))
         if response.parsed:
-            print '%s/%s\n' % (owner, repo)
+            print('%s/%s\n' % (owner, repo))
             for pull in response.parsed:
-                print '  [%s] %s' % (pull.head.user.login, pull.title)
-                print '  %s' % pull.html_url
-                print
+                print('  [%s] %s' % (pull.head.user.login, pull.title))
+                print('  %s' % pull.html_url)
+                print()
 
 
 if __name__ == '__main__':
-   main()
+    main()

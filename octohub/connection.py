@@ -8,11 +8,13 @@
 # version.
 
 import requests
+import re
 
 from octohub import __useragent__
 from octohub.response import parse_response
 
-class Pager(object):
+
+class Pager:
     def __init__(self, conn, uri, params, max_pages=0):
         """Iterator object handling pagination of Connection.send (method: GET)
             conn (octohub.Connection): Connection object
@@ -30,21 +32,23 @@ class Pager(object):
         while True:
             self.count += 1
             response = self.conn.send('GET', self.uri, self.params)
-            yield response
+            yield response.parsed
 
             if self.count == self.max_pages:
                 break
 
-            if not 'next' in response.parsed_link.keys():
+            if 'next' not in response.parsed_link.keys():
                 break
 
             # Parsed link is absolute. Connection wants a relative link,
             # so remove protocol and GitHub endpoint for the pagination URI.
-            m = re.match(self.conn.endpoint + '(.*)', response.parsed_link.next.uri)
+            m = re.match(self.conn.endpoint + '(.*)',
+                         response.parsed_link.next.uri)
             self.uri = m.groups()[0]
             self.params = response.parsed_link.next.params
 
-class Connection(object):
+
+class Connection:
     def __init__(self, token=None):
         """OctoHub connection
             token (str): GitHub Token (anonymous if not provided)
@@ -64,7 +68,8 @@ class Connection(object):
 
             returns: requests.Response object, including:
                 response.parsed (AttrDict): parsed response when applicable
-                response.parsed_link (AttrDict): parsed header link when applicable
+                response.parsed_link (AttrDict): parsed header link when
+                applicable
                 http://docs.python-requests.org/en/latest/api/#requests.Response
         """
         url = self.endpoint + uri
@@ -72,4 +77,3 @@ class Connection(object):
         response = requests.request(method, url, **kwargs)
 
         return parse_response(response)
-

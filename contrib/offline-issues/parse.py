@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 # Copyright (c) 2013 Alon Swartz <alon@turnkeylinux.org>
 #
 # This file is part of octohub/contrib
@@ -32,40 +32,46 @@ import getopt
 import shutil
 import unicodedata
 
-import simplejson as json
+import json
 
 from octohub.response import parse_element
 
+
 def fatal(e):
-    print >> sys.stderr, 'Error: ' + str(e)
+    print('Error: ' + str(e), file=sys.stderr)
     sys.exit(1)
+
 
 def usage(e=None):
     if e:
-        print >> sys.stderr, 'Error:', e
+        print('Error:', e, file=sys.stderr)
 
-    print >> sys.stderr, 'Syntax: %s [-options] issues.json outdir' % sys.argv[0]
-    print >> sys.stderr, __doc__.strip()
+    print('Syntax: %s [-options] issues.json outdir' % sys.argv[0],
+          file=sys.stderr)
+    print(__doc__.strip(), file=sys.stderr)
 
     sys.exit(1)
 
+
 def mkdir(path):
     if not os.path.exists(path):
-         os.makedirs(path)
+        os.makedirs(path)
+
 
 def symlink(target, link_name):
     if not os.path.exists(link_name):
         mkdir(os.path.dirname(link_name))
         os.symlink(target, link_name)
 
+
 def slugify(value):
     """Normalizes string, converts to lowercase, removes non-alpha characters,
     and converts spaces to hyphens.
     """
-    value = unicode(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
-    return re.sub('[-\s]+', '-', value)
+    value = re.sub(rb'[^\w\s-]', b'', value).strip().lower()
+    return re.sub(rb'[-\s]+', b'-', value).decode()
+
 
 def output_issues(issues, outdir):
     """Parse issues and output directory listing"""
@@ -75,8 +81,8 @@ def output_issues(issues, outdir):
         path = os.path.join(outdir, 'all', str(issue.number))
         path_symlink = '../../all/%s' % str(issue.number)
         mkdir(os.path.dirname(path))
-        file(path, 'w').write(json.dumps(issue, indent=1))
-
+        with open(path, 'w') as fob:
+            json.dump(issue, fob, indent=1)
         path = os.path.join(outdir, 'state', issue.state, slug)
         symlink(path_symlink, path)
 
@@ -88,10 +94,11 @@ def output_issues(issues, outdir):
             path = os.path.join(outdir, 'assignee', issue.assignee.login, slug)
             symlink(path_symlink, path)
 
+
 def main():
     try:
         opts, args = getopt.gnu_getopt(sys.argv[1:], 'h', ['help', 'noinit'])
-    except getopt.GetoptError, e:
+    except getopt.GetoptError as e:
         usage(e)
 
     init = True
@@ -120,9 +127,11 @@ def main():
             if os.path.exists(path):
                 shutil.rmtree(path)
 
-    issues_dict = json.loads(file(infile, 'r').read())
+    with open(infile, 'r') as fob:
+        issues_dict = json.loads(fob)
     issues_parsed = parse_element(issues_dict)
     output_issues(issues_parsed, outdir)
 
+
 if __name__ == "__main__":
-   main()
+    main()

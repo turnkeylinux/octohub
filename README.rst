@@ -42,7 +42,6 @@ Dependencies
 ''''''''''''
 
 * `python-requests`_
-* `python-simplejson`_
 
 GitHub Token
 ------------
@@ -57,17 +56,18 @@ Usage examples (API)
 ::
 
     >>> from octohub.connection import Connection
-    
     >>> conn = Connection(token)
     >>> uri = '/repos/turnkeylinux/tracker/issues'
+
     >>> response = conn.send('GET', uri, params={'labels': 'bug'})
     >>> for issue in response.parsed:
-    ...:    print issue.title
+    ...:    print(issue.title)
 
     >>> from octohub.connection import Pager
-    >>> pager = Pager(conn, uri)
-    >>> for issue in pager:
-    ...:    print issue.title
+    >>> pager = Pager(conn, uri, params={'labels': 'bug'})
+    >>> for issues in pager:
+    ...:    for issue in issues:
+    ...:        print(issue.title)
 
 Usage examples (CLI)
 --------------------
@@ -78,7 +78,7 @@ Usage examples (CLI)
     #   Account Settings > Applications > Personal Access Tokens > Create new token
     $ export OCTOHUB_TOKEN=d34db33fd34db33fd34db33fd34db33fd34db33f
     $ export OCTOHUB_LOGLEVEL=INFO
-    $ octohub GET /repos/turnkeylinux/tracker/issues labels=feature
+    $ octohub GET /repos/turnkeylinux/tracker/issues labels=feature,core per_page=100
 
     INFO [response]: status: 200 OK
     INFO [response]: x-ratelimit-limit: 5000
@@ -121,6 +121,5 @@ For more example usage::
 .. _contrib: https://github.com/turnkeylinux/octohub/tree/master/contrib/
 .. _gitflow: https://github.com/turnkeylinux/tracker/blob/master/GITFLOW.rst
 .. _python-requests: http://python-requests.org/
-.. _python-simplejson: https://github.com/simplejson/simplejson/
 .. _account settings: https://github.com/settings/applications
 
