@@ -79,7 +79,7 @@ class Connection:
         if params is None or params == {}:
             params = dict()
 
-        url = self.endpoint + uri
+        url = self.endpoint + str(uri)
         response = requests.request(method, url, headers=self.headers,
                 params=params, data=data)
 
