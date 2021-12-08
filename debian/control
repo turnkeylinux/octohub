@@ -21,4 +21,5 @@ Depends:
  python3-requests,
 Suggests:
  python3-profiler,
+ jq,
 Description: OctoHub: Low level Python and CLI interface to GitHub
