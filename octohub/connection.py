@@ -16,39 +16,6 @@ from octohub.response import parse_response
 
 DataSource = Union[TextIO, str]
 
-class Pager:
-    def __init__(self, conn: Connection, uri: str, params: dict, max_pages: int=0):
-        """Iterator object handling pagination of Connection.send (method: GET)
-            conn (octohub.Connection): Connection object
-            uri (str): Request URI (e.g., /user/issues)
-            params (dict): Parameters to include in request
-            max_pages (int): Maximum amount of pages to get (0 for all)
-        """
-        self.conn = conn
-        self.uri = uri
-        self.params = params
-        self.max_pages = max_pages
-        self.count = 0
-
-    def __iter__(self):
-        while True:
-            self.count += 1
-            response = self.conn.send('GET', self.uri, self.params)
-            yield response.parsed
-
-            if self.count == self.max_pages:
-                break
-
-            if 'next' not in response.parsed_link.keys():
-                break
-
-            # Parsed link is absolute. Connection wants a relative link,
-            # so remove protocol and GitHub endpoint for the pagination URI.
-            m = re.match(self.conn.endpoint + '(.*)',
-                         response.parsed_link.next.uri)
-            self.uri = m.groups()[0]
-            self.params = response.parsed_link.next.params
-
 
 class Connection:
     def __init__(self, token: Optional[str]=None):
@@ -84,3 +51,37 @@ class Connection:
                 params=params, data=data)
 
         return parse_response(response)
+
+
+class Pager:
+    def __init__(self, conn: Connection, uri: str, params: dict, max_pages: int=0):
+        """Iterator object handling pagination of Connection.send (method: GET)
+            conn (octohub.Connection): Connection object
+            uri (str): Request URI (e.g., /user/issues)
+            params (dict): Parameters to include in request
+            max_pages (int): Maximum amount of pages to get (0 for all)
+        """
+        self.conn = conn
+        self.uri = uri
+        self.params = params
+        self.max_pages = max_pages
+        self.count = 0
+
+    def __iter__(self):
+        while True:
+            self.count += 1
+            response = self.conn.send('GET', self.uri, self.params)
+            yield response.parsed
+
+            if self.count == self.max_pages:
+                break
+
+            if 'next' not in response.parsed_link.keys():
+                break
+
+            # Parsed link is absolute. Connection wants a relative link,
+            # so remove protocol and GitHub endpoint for the pagination URI.
+            m = re.match(self.conn.endpoint + '(.*)',
+                         response.parsed_link.next.uri)
+            self.uri = m.groups()[0]
+            self.params = response.parsed_link.next.params
