@@ -13,12 +13,6 @@ from typing import Any, Optional, Protocol
 
 from requests import Response
 
-class ResponseExt(Protocol):
-    parsed: AttrDict
-    parsed_link: AttrDict
-
-class OctoResponse(Response, ResponseExt):
-    ...
 
 class AttrDict(dict):
     """Attribute Dictionary (set and access attributes 'pythonically')"""
@@ -29,6 +23,15 @@ class AttrDict(dict):
 
     def __setattr__(self, name: str, val: Any):
         self[name] = val
+
+
+class ResponseExt(Protocol):
+    parsed: AttrDict
+    parsed_link: AttrDict
+
+
+class OctoResponse(Response, ResponseExt):
+    ...
 
 
 def get_logger(name: str, level: Optional[str]=None) -> logging.Logger:
