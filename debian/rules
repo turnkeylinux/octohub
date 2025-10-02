@@ -1,4 +1,6 @@
 #!/usr/bin/make -f
 
+export PYTHONDONTWRITEBYTECODE=1
+
 %:
 	dh $@ --buildsystem=pybuild
