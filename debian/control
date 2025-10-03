@@ -13,7 +13,7 @@ Build-Depends:
 Standards-Version: 4.0.0
 
 Package: octohub
-Architecture: any
+Architecture: all
 Depends:
  ${misc:Depends},
  ${python3:Depends},
