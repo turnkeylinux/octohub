@@ -1,0 +1,6 @@
+v0.3 Release Notes
+==================
+
+* Minor packaging updates:
+  - Update architecture: 'any' => 'all'.
+  - Updates to support reproducable build.
