@@ -1,6 +1,25 @@
-*.pyc
-__pycache__
-build
-tests
-dist/
-octohub.egg-info/
+# cached dev files
+**/__pycache__/
+.mypy_cache/
+.ruff_cache/
+**/*.swp
+
+# python build assets
+.pybuild/
+build/
+*.egg-info/
+
+# deb package build assests
+debian/octohub/
+
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/*.debhelper.log
+debian/*.debhelper
+debian/*.substvars
+debian/files
+
+# other files/dirs
+tmp
+tags
+*.tar.bz2
